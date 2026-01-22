@@ -1,22 +1,46 @@
 # NodePCB
 
+## About
 
-# About
-
-The node editor is an Avalonia control for editing and rendering nodes and connectors. Node contents can be defined from xaml. Node controls, connectors and pins can be retemplated from xaml or used with the provided default theme. The contents of the nodes are rendered based on provided view models. The default implementation of the view models is done using ReactiveUI, users can create their own view models based on core model interfaces. The node contents are resolved using the provided object type by view locator.
+Simple idea to edit PCBs with curves  
 
 ![image](/images/CurvePCB.gif)
 
-## Building NodeEditor
+## Requirements
+
+* **.NET SDK**: 10.0.102 or later
+* **Target Frameworks**: 
+  - `netstandard2.0` and `net6.0` for core libraries
+  - `net8.0` for sample applications
+
+## Project Structure
+
+```
+NodePCB/
+├── src/                          # Source libraries
+│   ├── NodeEditorAvalonia/      # Main Avalonia controls package
+│   ├── NodeEditorAvalonia.Model/ # Base interfaces and models
+│   └── NodeEditorAvalonia.Mvvm/  # MVVM view models implementation
+├── samples/                      # Sample applications
+│   ├── NodeEditor.Base/         # Base sample application
+│   ├── NodeEditor.Desktop/      # Desktop sample application
+│   └── NodeEditor.Web/          # Web/WASM sample application
+├── tests/                        # Unit tests
+│   └── NodeEditorAvalonia.UnitTests/
+├── build/                        # Build scripts and props files
+└── images/                       # Project images and assets
+```
+
+## Building NodePCB
 
 First, clone the repository or download the latest zip.
 ```
-git clone https://github.com/wieslawsoltes/NodeEditor.git
+git clone https://github.com/roboter/NodePCB.git
 ```
 
 ### Build on Windows using script
 
-* [.NET Core](https://www.microsoft.com/net/download?initial-os=windows).
+* [.NET SDK 10.0](https://www.microsoft.com/net/download?initial-os=windows).
 
 Open up a command-prompt and execute the commands:
 ```
@@ -25,7 +49,7 @@ Open up a command-prompt and execute the commands:
 
 ### Build on Linux using script
 
-* [.NET Core](https://www.microsoft.com/net/download?initial-os=linux).
+* [.NET SDK 10.0](https://www.microsoft.com/net/download?initial-os=linux).
 
 Open up a terminal prompt and execute the commands:
 ```
@@ -34,7 +58,7 @@ Open up a terminal prompt and execute the commands:
 
 ### Build on OSX using script
 
-* [.NET Core](https://www.microsoft.com/net/download?initial-os=macos).
+* [.NET SDK 10.0](https://www.microsoft.com/net/download?initial-os=macos).
 
 Open up a terminal prompt and execute the commands:
 ```
@@ -44,14 +68,14 @@ Open up a terminal prompt and execute the commands:
 ## Web
 
 ```
-git clone https://github.com/wieslawsoltes/NodeEditor.git
+git clone https://github.com/roboter/NodePCB.git
 dotnet workload install wasm-tools
 dotnet run --project ./samples/NodeEditor.Web/NodeEditor.Web.csproj -c Release
 ```
 
 ## NuGet
 
-NodeEditor is delivered as a NuGet package.
+NodePCB is delivered as a NuGet package.
 
 You can find the packages here [NuGet](https://www.nuget.org/packages/NodeEditorAvalonia/) and install the package like this:
 
@@ -70,8 +94,8 @@ You can find the packages here [NuGet](https://www.nuget.org/packages/NodeEditor
 
 ## Resources
 
-* [GitHub source code repository.](https://github.com/wieslawsoltes/NodeEditor)
+* [GitHub source code repository.](https://github.com/roboter/NodePCB)
 
 ## License
 
-NodeEditor is licensed under the [MIT license](LICENSE.TXT).
+NodePCB is licensed under the [MIT license](LICENSE.TXT).
