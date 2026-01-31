@@ -1,0 +1,198 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NodeEditorDemo.ViewModels.Nodes"
+             mc:Ignorable="d" d:DesignWidth="80" d:DesignHeight="80"
+             x:Class="NodeEditorDemo.Views.Nodes.LEDView"
+             x:CompileBindings="True" x:DataType="vm:LEDViewModel"
+             ClipToBounds="False">
+  <Design.DataContext>
+    <vm:LEDViewModel Color="Red" />
+  </Design.DataContext>
+
+  <Panel>
+    <Panel.ContextFlyout>
+      <Flyout>
+        <StackPanel Width="250" Spacing="10">
+          <Label Content="LED Properties" FontWeight="Bold" />
+
+          <StackPanel Spacing="5">
+            <Label Content="Color:" />
+            <ComboBox SelectedItem="{Binding Color}">
+              <ComboBoxItem>Red</ComboBoxItem>
+              <ComboBoxItem>Green</ComboBoxItem>
+              <ComboBoxItem>Blue</ComboBoxItem>
+              <ComboBoxItem>Yellow</ComboBoxItem>
+              <ComboBoxItem>Orange</ComboBoxItem>
+              <ComboBoxItem>White</ComboBoxItem>
+              <ComboBoxItem>Pink</ComboBoxItem>
+              <ComboBoxItem>Purple</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Type:" />
+            <ComboBox SelectedItem="{Binding LedType}">
+              <ComboBoxItem>Standard</ComboBoxItem>
+              <ComboBoxItem>RGB</ComboBoxItem>
+              <ComboBoxItem>IR</ComboBoxItem>
+              <ComboBoxItem>UV</ComboBoxItem>
+              <ComboBoxItem>Laser</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Forward Voltage:" />
+            <TextBox Text="{Binding ForwardVoltage}" Watermark="e.g., 1.8V" />
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Forward Current:" />
+            <TextBox Text="{Binding ForwardCurrent}" Watermark="e.g., 20mA" />
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Package:" />
+            <ComboBox SelectedItem="{Binding Package}">
+              <ComboBoxItem>3mm</ComboBoxItem>
+              <ComboBoxItem>5mm</ComboBoxItem>
+              <ComboBoxItem>10mm</ComboBoxItem>
+              <ComboBoxItem>0603</ComboBoxItem>
+              <ComboBoxItem>0805</ComboBoxItem>
+              <ComboBoxItem>1206</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+
+          <CheckBox Content="LED On" IsChecked="{Binding IsOn}" />
+        </StackPanel>
+      </Flyout>
+    </Panel.ContextFlyout>
+
+    <!-- Component Background -->
+    <Ellipse Width="80" Height="80"
+             Fill="{Binding ColorCode, FallbackValue=#FF0000}"
+             Stroke="#2F4F4F"
+             StrokeThickness="3"
+             Opacity="{Binding IsOn, Converter={StaticResource BoolToOpacityConverter}}">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="4"
+                         OffsetX="2"
+                         OffsetY="2"
+                         Color="Gray"
+                         Opacity="0.4" />
+      </Ellipse.Effect>
+    </Ellipse>
+
+    <!-- LED Symbol -->
+    <Canvas Width="80" Height="80">
+      <!-- Connection Lines -->
+      <Line StartPoint="10,40" EndPoint="25,40" Stroke="#2F4F4F" StrokeThickness="2" />
+      <Line StartPoint="55,40" EndPoint="70,40" Stroke="#2F4F4F" StrokeThickness="2" />
+
+      <!-- LED Diode Symbol -->
+      <!-- Triangle (diode part) -->
+      <Polygon Points="25,40 45,30 45,50"
+               Fill="#2F4F4F"
+               Stroke="#2F4F4F"
+               StrokeThickness="2" />
+
+      <!-- Vertical line (cathode) -->
+      <Line StartPoint="55,30" EndPoint="55,50" Stroke="#2F4F4F" StrokeThickness="3" />
+
+      <!-- Light arrows -->
+      <Polyline Points="48,25 53,20 51,22 55,18"
+                Stroke="#FFD700"
+                StrokeThickness="2"
+                IsVisible="{Binding IsOn}" />
+
+      <Polyline Points="52,28 57,23 55,25 59,21"
+                Stroke="#FFD700"
+                StrokeThickness="2"
+                IsVisible="{Binding IsOn}" />
+
+      <!-- Polarity markers -->
+      <TextBlock Text="A"
+                 Canvas.Left="18"
+                 Canvas.Top="25"
+                 FontSize="10"
+                 FontWeight="Bold"
+                 Foreground="#DC143C" />
+
+      <TextBlock Text="K"
+                 Canvas.Left="58"
+                 Canvas.Top="25"
+                 FontSize="10"
+                 FontWeight="Bold"
+                 Foreground="#000080" />
+
+      <!-- Terminal Pads -->
+      <Ellipse Width="8" Height="8" Canvas.Left="6" Canvas.Top="36" Fill="#CD7F32" Stroke="#2F4F4F" StrokeThickness="1" />
+      <Ellipse Width="8" Height="8" Canvas.Left="66" Canvas.Top="36" Fill="#CD7F32" Stroke="#2F4F4F" StrokeThickness="1" />
+    </Canvas>
+
+    <!-- Component Label -->
+    <Border Background="White"
+            CornerRadius="2"
+            Padding="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="0,0,0,8">
+      <TextBlock Text="{Binding DisplaySymbol}"
+                 FontSize="10"
+                 FontWeight="Bold"
+                 Foreground="#2F4F4F"
+                 HorizontalAlignment="Center" />
+    </Border>
+
+    <!-- Status Indicator -->
+    <Border Background="White"
+            CornerRadius="8"
+            Width="16"
+            Height="16"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0,5,5,0">
+      <Ellipse Width="8" Height="8"
+               Fill="{Binding IsOn, Converter={StaticResource BoolToColorConverter}}"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
+    </Border>
+
+    <!-- Selection Indicator -->
+    <Ellipse Width="80" Height="80"
+             Fill="Transparent"
+             Stroke="#FF6B35"
+             StrokeThickness="2"
+             StrokeDashArray="4,2"
+             IsVisible="{Binding IsSelected}" />
+
+    <!-- Pin Connection Points -->
+    <Ellipse Width="4" Height="4"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Center"
+             Margin="8,0,0,0"
+             Fill="#FF6B35"
+             Opacity="0.7" />
+
+    <Ellipse Width="4" Height="4"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Center"
+             Margin="0,0,8,0"
+             Fill="#FF6B35"
+             Opacity="0.7" />
+
+    <!-- Glow effect when LED is on -->
+    <Ellipse Width="90" Height="90"
+             Fill="{Binding ColorCode, FallbackValue=#FF0000}"
+             Opacity="0.3"
+             IsVisible="{Binding IsOn}"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             ZIndex="-1">
+      <Ellipse.Effect>
+        <BlurEffect Radius="10" />
+      </Ellipse.Effect>
+    </Ellipse>
+  </Panel>
+</UserControl>

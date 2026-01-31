@@ -65,6 +65,10 @@ Open up a terminal prompt and execute the commands:
 ./build.sh
 ```
 
+```sh
+cd NodePCB && dotnet run --project samples/NodeEditor.Desktop/NodeEditor.Desktop.csproj --no-build
+```
+
 ## Web
 
 ```

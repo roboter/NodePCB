@@ -263,7 +263,255 @@ public class NodeFactory : INodeFactory
                 Title = "OR Gate",
                 Template = CreateOrGate(0, 0, 60, 60),
                 Preview = CreateOrGate(0, 0, 60, 60)
+            },
+            new NodeTemplateViewModel
+            {
+                Title = "Resistor",
+                Template = CreateResistor(0, 0),
+                Preview = CreateResistor(0, 0)
+            },
+            new NodeTemplateViewModel
+            {
+                Title = "Capacitor",
+                Template = CreateCapacitor(0, 0),
+                Preview = CreateCapacitor(0, 0)
+            },
+            new NodeTemplateViewModel
+            {
+                Title = "LED",
+                Template = CreateLED(0, 0),
+                Preview = CreateLED(0, 0)
+            },
+            new NodeTemplateViewModel
+            {
+                Title = "Transistor",
+                Template = CreateTransistor(0, 0),
+                Preview = CreateTransistor(0, 0)
+            },
+            new NodeTemplateViewModel
+            {
+                Title = "Microcontroller",
+                Template = CreateMicrocontroller(0, 0),
+                Preview = CreateMicrocontroller(0, 0)
             }
         };
+    }
+
+    // PCB Electronic Components Factory Methods
+    internal static INode CreateResistor(double x, double y, string? value = "10kΩ", string? tolerance = "5%")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 120,
+            Height = 40,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new ResistorViewModel { Value = value, Tolerance = tolerance }
+        };
+
+        node.AddPin(0, 20, 8, 8, PinAlignment.Left, "1");
+        node.AddPin(120, 20, 8, 8, PinAlignment.Right, "2");
+
+        return node;
+    }
+
+    internal static INode CreateCapacitor(double x, double y, string? value = "100µF", string? voltage = "25V")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 100,
+            Height = 60,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new CapacitorViewModel { Value = value, Voltage = voltage }
+        };
+
+        node.AddPin(0, 30, 8, 8, PinAlignment.Left, "A");
+        node.AddPin(100, 30, 8, 8, PinAlignment.Right, "K");
+
+        return node;
+    }
+
+    internal static INode CreateLED(double x, double y, string? color = "Red", string? type = "Standard")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 80,
+            Height = 80,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new LEDViewModel { Color = color }
+        };
+
+        node.AddPin(0, 40, 8, 8, PinAlignment.Left, "A");
+        node.AddPin(80, 40, 8, 8, PinAlignment.Right, "K");
+
+        return node;
+    }
+
+    internal static INode CreateTransistor(double x, double y, string? partNumber = "2N2222", string? type = "NPN")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 100,
+            Height = 80,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new TransistorViewModel { PartNumber = partNumber }
+        };
+
+        node.AddPin(0, 40, 6, 6, PinAlignment.Left, "B");
+        node.AddPin(100, 15, 6, 6, PinAlignment.Right, "C");
+        node.AddPin(100, 65, 6, 6, PinAlignment.Right, "E");
+
+        return node;
+    }
+
+    internal static INode CreateMicrocontroller(double x, double y, string? partNumber = "Arduino Nano", string? type = "Arduino")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 160,
+            Height = 120,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new MicrocontrollerViewModel { PartNumber = partNumber }
+        };
+
+        // Add digital pins (left side)
+        for (int i = 0; i < 13; i++)
+        {
+            node.AddPin(0, 15 + i * 7, 6, 6, PinAlignment.Left, $"D{i}");
+        }
+
+        // Add analog pins (right side)
+        for (int i = 0; i < 8; i++)
+        {
+            node.AddPin(160, 15 + i * 7, 6, 6, PinAlignment.Right, $"A{i}");
+        }
+
+        // Add power pins
+        node.AddPin(0, 100, 6, 6, PinAlignment.Left, "VCC");
+        node.AddPin(160, 100, 6, 6, PinAlignment.Right, "GND");
+
+        return node;
+    }
+
+    internal static INode CreateInductor(double x, double y, string? value = "100µH", string? current = "1A")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 100,
+            Height = 40,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = value }
+        };
+
+        node.AddPin(0, 20, 8, 8, PinAlignment.Left, "1");
+        node.AddPin(100, 20, 8, 8, PinAlignment.Right, "2");
+
+        return node;
+    }
+
+    internal static INode CreateDiode(double x, double y, string? partNumber = "1N4007", string? type = "Standard")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 80,
+            Height = 40,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = partNumber }
+        };
+
+        node.AddPin(0, 20, 8, 8, PinAlignment.Left, "A");
+        node.AddPin(80, 20, 8, 8, PinAlignment.Right, "K");
+
+        return node;
+    }
+
+    internal static INode CreateConnector(double x, double y, int pins = 2, string? type = "Header")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 40,
+            Height = pins * 20,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = $"{pins}P {type}" }
+        };
+
+        for (int i = 0; i < pins; i++)
+        {
+            node.AddPin(0, 10 + i * 20, 8, 8, PinAlignment.Left, $"{i + 1}");
+        }
+
+        return node;
+    }
+
+    internal static INode CreateOpAmp(double x, double y, string? partNumber = "LM358", string? type = "Dual")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 80,
+            Height = 60,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = partNumber }
+        };
+
+        node.AddPin(0, 15, 6, 6, PinAlignment.Left, "V+");
+        node.AddPin(0, 45, 6, 6, PinAlignment.Left, "V-");
+        node.AddPin(80, 30, 6, 6, PinAlignment.Right, "OUT");
+        node.AddPin(40, 0, 6, 6, PinAlignment.Top, "VCC");
+        node.AddPin(40, 60, 6, 6, PinAlignment.Bottom, "GND");
+
+        return node;
+    }
+
+    internal static INode CreateCrystal(double x, double y, string? frequency = "16MHz", string? type = "HC-49")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 60,
+            Height = 30,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = frequency }
+        };
+
+        node.AddPin(0, 15, 6, 6, PinAlignment.Left, "1");
+        node.AddPin(60, 15, 6, 6, PinAlignment.Right, "2");
+
+        return node;
+    }
+
+    internal static INode CreateBattery(double x, double y, string? voltage = "3.7V", string? type = "Li-Ion")
+    {
+        var node = new NodeViewModel
+        {
+            X = x,
+            Y = y,
+            Width = 80,
+            Height = 50,
+            Pins = new ObservableCollection<IPin>(),
+            Content = new RectangleViewModel { Label = $"{voltage} {type}" }
+        };
+
+        node.AddPin(0, 25, 8, 8, PinAlignment.Left, "+");
+        node.AddPin(80, 25, 8, 8, PinAlignment.Right, "-");
+
+        return node;
     }
 }

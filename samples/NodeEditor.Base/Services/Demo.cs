@@ -27,6 +27,7 @@ internal static class Demo
             GridCellHeight = Inch * 10,
         };
 
+        // Create some basic components first
         var rectangle0 = NodeFactory.CreateRectangle(30, 30, 60, 60, "rect0");
         rectangle0.Parent = drawing;
         drawing.Nodes.Add(rectangle0);
@@ -40,6 +41,42 @@ internal static class Demo
             var connector0 = NodeFactory.CreateConnector(rectangle0.Pins[1], rectangle1.Pins[0], 20);
             connector0.Parent = drawing;
             drawing.Connectors.Add(connector0);
+        }
+
+        // Add PCB electronic components
+        var resistor1 = NodeFactory.CreateResistor(30, 120, "10kΩ", "5%");
+        resistor1.Parent = drawing;
+        drawing.Nodes.Add(resistor1);
+
+        var capacitor1 = NodeFactory.CreateCapacitor(200, 120, "100µF", "25V");
+        capacitor1.Parent = drawing;
+        drawing.Nodes.Add(capacitor1);
+
+        var led1 = NodeFactory.CreateLED(350, 100, "Red");
+        led1.Parent = drawing;
+        drawing.Nodes.Add(led1);
+
+        var transistor1 = NodeFactory.CreateTransistor(30, 220, "2N2222");
+        transistor1.Parent = drawing;
+        drawing.Nodes.Add(transistor1);
+
+        var arduino1 = NodeFactory.CreateMicrocontroller(200, 220, "Arduino Nano");
+        arduino1.Parent = drawing;
+        drawing.Nodes.Add(arduino1);
+
+        // Connect some components
+        if (resistor1.Pins?[1] is { } && capacitor1.Pins?[0] is { })
+        {
+            var connector1 = NodeFactory.CreateConnector(resistor1.Pins[1], capacitor1.Pins[0], 20);
+            connector1.Parent = drawing;
+            drawing.Connectors.Add(connector1);
+        }
+
+        if (capacitor1.Pins?[1] is { } && led1.Pins?[0] is { })
+        {
+            var connector2 = NodeFactory.CreateConnector(capacitor1.Pins[1], led1.Pins[0], 20);
+            connector2.Parent = drawing;
+            drawing.Connectors.Add(connector2);
         }
 
         //var rectangle2 = NodeFactory.CreateRectangle(30, 150, 60, 60, "rect2");

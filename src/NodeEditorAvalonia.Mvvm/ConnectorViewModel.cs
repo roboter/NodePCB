@@ -6,10 +6,6 @@ using ReactiveMarbles.PropertyChanged;
 
 namespace NodeEditor.Mvvm;
 
-
-
-
-
 [ObservableObject]
 public partial class OffsetConnectorViewModel : ICommonConnector
 {

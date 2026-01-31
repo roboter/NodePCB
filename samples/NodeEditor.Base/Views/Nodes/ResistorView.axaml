@@ -1,0 +1,131 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NodeEditorDemo.ViewModels.Nodes"
+             mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="40"
+             x:Class="NodeEditorDemo.Views.Nodes.ResistorView"
+             x:CompileBindings="True" x:DataType="vm:ResistorViewModel"
+             ClipToBounds="False">
+  <Design.DataContext>
+    <vm:ResistorViewModel Value="10kΩ" />
+  </Design.DataContext>
+
+  <Panel>
+    <Panel.ContextFlyout>
+      <Flyout>
+        <StackPanel Width="250" Spacing="10">
+          <Label Content="Resistor Properties" FontWeight="Bold" />
+
+          <StackPanel Spacing="5">
+            <Label Content="Value:" />
+            <TextBox Text="{Binding Value}" Watermark="e.g., 10kΩ" />
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Tolerance:" />
+            <ComboBox SelectedItem="{Binding Tolerance}">
+              <ComboBoxItem>1%</ComboBoxItem>
+              <ComboBoxItem>2%</ComboBoxItem>
+              <ComboBoxItem>5%</ComboBoxItem>
+              <ComboBoxItem>10%</ComboBoxItem>
+              <ComboBoxItem>20%</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Power Rating:" />
+            <ComboBox SelectedItem="{Binding Power}">
+              <ComboBoxItem>1/8W</ComboBoxItem>
+              <ComboBoxItem>1/4W</ComboBoxItem>
+              <ComboBoxItem>1/2W</ComboBoxItem>
+              <ComboBoxItem>1W</ComboBoxItem>
+              <ComboBoxItem>2W</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Spacing="5">
+            <Label Content="Package:" />
+            <ComboBox SelectedItem="{Binding Package}">
+              <ComboBoxItem>0402</ComboBoxItem>
+              <ComboBoxItem>0603</ComboBoxItem>
+              <ComboBoxItem>0805</ComboBoxItem>
+              <ComboBoxItem>1206</ComboBoxItem>
+              <ComboBoxItem>Through-hole</ComboBoxItem>
+            </ComboBox>
+          </StackPanel>
+        </StackPanel>
+      </Flyout>
+    </Panel.ContextFlyout>
+
+    <!-- Component Background -->
+    <Rectangle Width="120" Height="40"
+               Fill="#F5F5DC"
+               Stroke="#8B4513"
+               StrokeThickness="2"
+               RadiusX="3" RadiusY="3">
+      <Rectangle.Effect>
+        <DropShadowEffect BlurRadius="3"
+                         OffsetX="1"
+                         OffsetY="1"
+                         Color="Gray"
+                         Opacity="0.3" />
+      </Rectangle.Effect>
+    </Rectangle>
+
+    <!-- Resistor Zigzag Pattern -->
+    <Canvas Width="120" Height="40">
+      <!-- Connection Lines -->
+      <Line StartPoint="10,20" EndPoint="25,20" Stroke="#8B4513" StrokeThickness="2" />
+      <Line StartPoint="95,20" EndPoint="110,20" Stroke="#8B4513" StrokeThickness="2" />
+
+      <!-- Zigzag Resistor Symbol -->
+      <Polyline Points="25,20 30,10 35,30 40,10 45,30 50,10 55,30 60,10 65,30 70,10 75,30 80,10 85,30 90,10 95,20"
+                Stroke="#8B4513"
+                StrokeThickness="3"
+                Fill="Transparent" />
+
+      <!-- Terminal Pads -->
+      <Ellipse Width="8" Height="8" Canvas.Left="6" Canvas.Top="16" Fill="#CD7F32" Stroke="#8B4513" StrokeThickness="1" />
+      <Ellipse Width="8" Height="8" Canvas.Left="106" Canvas.Top="16" Fill="#CD7F32" Stroke="#8B4513" StrokeThickness="1" />
+    </Canvas>
+
+    <!-- Component Label -->
+    <Border Background="White"
+            CornerRadius="2"
+            Padding="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="0,2,0,0">
+      <TextBlock Text="{Binding DisplayValue}"
+                 FontSize="10"
+                 FontWeight="Bold"
+                 Foreground="#8B4513"
+                 HorizontalAlignment="Center" />
+    </Border>
+
+    <!-- Selection Indicator -->
+    <Rectangle Width="120" Height="40"
+               Fill="Transparent"
+               Stroke="#FF6B35"
+               StrokeThickness="2"
+               StrokeDashArray="4,2"
+               RadiusX="3" RadiusY="3"
+               IsVisible="{Binding IsSelected}" />
+
+    <!-- Pin Connection Points -->
+    <Ellipse Width="4" Height="4"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Center"
+             Margin="8,0,0,0"
+             Fill="#FF6B35"
+             Opacity="0.7" />
+
+    <Ellipse Width="4" Height="4"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Center"
+             Margin="0,0,8,0"
+             Fill="#FF6B35"
+             Opacity="0.7" />
+  </Panel>
+</UserControl>
