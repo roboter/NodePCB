@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -32,6 +33,9 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
     private SelectionAdorner? _selectionAdorner;
     private SelectedAdorner? _selectedAdorner;
     private bool _dragSelectedItems;
+    private bool _dragControlPoint;
+    private IPin? _draggedControlPin;
+    private IBezierConnector? _draggedConnector;
     private Point _start;
     private Rect _selectedRect;
     private Control? _inputSource;
@@ -171,9 +175,8 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
         if (_drawingNode is { })
         {
             var selectedNodes = _drawingNode.GetSelectedNodes();
-            var selectedConnectors = _drawingNode.GetSelectedConnectors();
 
-            if (selectedNodes is { Count: > 0 } || selectedConnectors is { Count: > 0 })
+            if (selectedNodes is { Count: > 0 })
             {
                 _selectedRect = HitTestHelper.CalculateSelectedRect(AssociatedObject);
 
@@ -189,6 +192,7 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
             }
             else
             {
+                _selectedRect = default;
                 RemoveSelected();
             }
         }
@@ -226,41 +230,41 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
         }
 
         _dragSelectedItems = false;
+        _dragControlPoint = false;
+        _draggedControlPin = null;
+        _draggedConnector = null;
 
-        var pointerHitTestRect = new Rect(position.X - 1, position.Y - 1, 3, 3);
+        var (hitBezier, hitPin) = HitTestHelper.HitTestControlPoint(drawingNode, position);
+        if (hitBezier is not null && hitPin is not null)
+        {
+            var currentSelectedConnectors = drawingNode.GetSelectedConnectors();
+            if (currentSelectedConnectors is null || !currentSelectedConnectors.Contains(hitBezier))
+            {
+                drawingNode.NotifyDeselectedNodes();
+                drawingNode.NotifyDeselectedConnectors();
+                drawingNode.SetSelectedNodes(null);
+                drawingNode.SetSelectedConnectors(new HashSet<ICommonConnector> { hitBezier });
+                drawingNode.NotifySelectionChanged();
+                hitBezier.OnSelected();
+            }
+
+            _dragControlPoint = true;
+            _draggedControlPin = hitPin;
+            _draggedConnector = hitBezier;
+
+            e.Pointer.Capture(_inputSource);
+            e.Handled = true;
+            return;
+        }
+
+        var pointerHitTestRect = new Rect(position.X - 6, position.Y - 6, 12, 12);
         var selectedNodes = drawingNode.GetSelectedNodes();
         var selectedConnectors = drawingNode.GetSelectedConnectors();
 
-        if (selectedNodes is { Count: > 0 } || selectedConnectors is { Count: > 0 })
+        if (selectedNodes is { Count: > 0 } && _selectedRect.Contains(position))
         {
-            if (_selectedRect.Contains(position))
-            {
-                _dragSelectedItems = true;
-                _start = SnapHelper.Snap(position, SnapX, SnapY, EnableSnap);
-            }
-            else
-            {
-                HitTestHelper.FindSelectedNodes(AssociatedObject, pointerHitTestRect);
-
-                selectedNodes = drawingNode.GetSelectedNodes();
-                selectedConnectors = drawingNode.GetSelectedConnectors();
-
-                if (selectedNodes is { Count: > 0 } || selectedConnectors is { Count: > 0 })
-                {
-                    _dragSelectedItems = true;
-                    _start = SnapHelper.Snap(position, SnapX, SnapY, EnableSnap);
-                }
-                else
-                {
-                    drawingNode.NotifyDeselectedNodes();
-                    drawingNode.NotifyDeselectedConnectors();
-                    drawingNode.SetSelectedNodes(null);
-                    drawingNode.SetSelectedConnectors(null);
-                    drawingNode.NotifySelectionChanged();
-
-                    RemoveSelected();
-                }
-            }
+            _dragSelectedItems = true;
+            _start = SnapHelper.Snap(position, SnapX, SnapY, EnableSnap);
         }
         else
         {
@@ -269,14 +273,28 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
             selectedNodes = drawingNode.GetSelectedNodes();
             selectedConnectors = drawingNode.GetSelectedConnectors();
 
-            if (selectedNodes is { Count: > 0 } || selectedConnectors is { Count: > 0 })
+            if (selectedNodes is { Count: > 0 })
             {
                 _dragSelectedItems = true;
                 _start = SnapHelper.Snap(position, SnapX, SnapY, EnableSnap);
-            } 
+            }
+            else if (selectedConnectors is { Count: > 0 })
+            {
+                _dragSelectedItems = false;
+            }
+            else
+            {
+                drawingNode.NotifyDeselectedNodes();
+                drawingNode.NotifyDeselectedConnectors();
+                drawingNode.SetSelectedNodes(null);
+                drawingNode.SetSelectedConnectors(null);
+                drawingNode.NotifySelectionChanged();
+
+                RemoveSelected();
+            }
         }
 
-        if (!_dragSelectedItems)
+        if (!_dragSelectedItems && (selectedConnectors is null || selectedConnectors.Count == 0))
         {
             drawingNode.SetSelectedNodes(null);
             drawingNode.SetSelectedConnectors(null);
@@ -298,6 +316,16 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
     {
         if (Equals(e.Pointer.Captured, _inputSource))
         {
+            if (_dragControlPoint)
+            {
+                _dragControlPoint = false;
+                _draggedControlPin = null;
+                _draggedConnector = null;
+                e.Pointer.Capture(null);
+                e.Handled = true;
+                return;
+            }
+
             if (e.InitialPressMouseButton == MouseButton.Left && AssociatedObject?.DataContext is IDrawingNode)
             {
                 _dragSelectedItems = false;
@@ -319,6 +347,9 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
 
     private void CaptureLost(object? sender, PointerCaptureLostEventArgs e)
     {
+        _dragControlPoint = false;
+        _draggedControlPin = null;
+        _draggedConnector = null;
         RemoveSelection();
     }
 
@@ -329,6 +360,27 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
         if (Equals(e.Pointer.Captured, _inputSource) && info.Properties.IsLeftButtonPressed && AssociatedObject?.DataContext is IDrawingNode)
         {
             var position = e.GetPosition(AssociatedObject);
+
+            if (_dragControlPoint && _draggedControlPin is not null)
+            {
+                var snappedPos = SnapHelper.Snap(position, SnapX, SnapY, EnableSnap);
+
+                if (_draggedControlPin.Parent is { } parentNode)
+                {
+                    _draggedControlPin.X = snappedPos.X - parentNode.X;
+                    _draggedControlPin.Y = snappedPos.Y - parentNode.Y;
+                }
+                else
+                {
+                    _draggedControlPin.X = snappedPos.X;
+                    _draggedControlPin.Y = snappedPos.Y;
+                }
+
+                _draggedControlPin.OnMoved();
+
+                e.Handled = true;
+                return;
+            }
 
             if (_dragSelectedItems)
             {
@@ -373,7 +425,21 @@ public class DrawingSelectionBehavior : Behavior<ItemsControl>
                 }
             }
         }
+        else if (AssociatedObject?.DataContext is IDrawingNode dn && _inputSource is not null)
+        {
+            var pos = e.GetPosition(AssociatedObject);
+            var (hoverBezier, hoverPin) = HitTestHelper.HitTestControlPoint(dn, pos);
+            if (hoverPin is not null)
+            {
+                _inputSource.Cursor = new Cursor(StandardCursorType.Hand);
+            }
+            else
+            {
+                _inputSource.Cursor = Cursor.Default;
+            }
+        }
     }
+
 
     private void AddSelection(double x, double y)
     {

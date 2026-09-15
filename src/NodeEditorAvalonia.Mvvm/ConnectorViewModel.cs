@@ -15,6 +15,8 @@ public partial class OffsetConnectorViewModel : ICommonConnector
     [ObservableProperty] private IPin? _start;
     [ObservableProperty] private IPin? _end;
     [ObservableProperty] private double _offset = 50;
+    [ObservableProperty] private bool _isSelected;
+
 
     public event EventHandler<ConnectorCreatedEventArgs>? Created;
 
@@ -103,13 +105,16 @@ public partial class OffsetConnectorViewModel : ICommonConnector
 
     public void OnSelected()
     {
+        IsSelected = true;
         Selected?.Invoke(this, new ConnectorSelectedEventArgs(this));
     }
 
     public void OnDeselected()
     {
+        IsSelected = false;
         Deselected?.Invoke(this, new ConnectorDeselectedEventArgs(this));
     }
+
 
     public void OnStartChanged()
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NodeEditor.Model;
 using NodeEditor.Mvvm;
@@ -187,9 +187,9 @@ public class NodeFactory : INodeFactory
         return node;
     }
 
-    internal static ICommonConnector CreateConnector(IPin? start, IPin? end, double offset)
+    internal static ICommonConnector CreateConnector(IPin? start, IPin? end, double offset = 50)
     {
-        return new OffsetConnectorViewModel
+        return new BezierConnectorViewModel
         {
             Start = start,
             End = end,
@@ -199,11 +199,10 @@ public class NodeFactory : INodeFactory
 
     internal static ICommonConnector CreateBezierConnector(IPin? start, IPin? end)
     {
-        return new OffsetConnectorViewModel
+        return new BezierConnectorViewModel
         {
             Start = start,
             End = end,
-
         };
     }
 

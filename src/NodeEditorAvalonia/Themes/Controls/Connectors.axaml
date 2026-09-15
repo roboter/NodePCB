@@ -1,8 +1,10 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:m="clr-namespace:NodeEditor.Model;assembly=NodeEditorAvalonia.Model"
                     xmlns:converters="clr-namespace:NodeEditor.Converters"
                     xmlns:controls="clr-namespace:NodeEditor.Controls"
+                    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+                    xmlns:behaviors="clr-namespace:NodeEditor.Behaviors"
                     x:CompileBindings="True">
 
   <ControlTheme x:Key="{x:Type controls:Connectors}" TargetType="controls:Connectors">
@@ -18,19 +20,31 @@
                       Background="Transparent"
                       IsHitTestVisible="False"
                       ClipToBounds="False">
+          <i:Interaction.Behaviors>
+            <behaviors:ConnectorsSelectedBehavior />
+          </i:Interaction.Behaviors>
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
               <Canvas />
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
-          <ItemsControl.ItemTemplate>
+          <ItemsControl.DataTemplates>
+            <DataTemplate DataType="m:IBezierConnector">
+              <controls:BezierConnector Name="PART_BezierConnector"
+                                        StartPoint="{Binding Start, Converter={x:Static converters:PinToPointConverter.Instance}}" 
+                                        EndPoint="{Binding End, Converter={x:Static converters:PinToPointConverter.Instance}}"
+                                        StartControlPoint="{Binding StartControl, Converter={x:Static converters:PinToPointConverter.Instance}}"
+                                        EndControlPoint="{Binding EndControl, Converter={x:Static converters:PinToPointConverter.Instance}}"
+                                        ShowControlPoints="{Binding IsSelected}" />
+            </DataTemplate>
             <DataTemplate DataType="m:ICommonConnector">
               <controls:OffsetConnector Name="PART_Connector"
-                                  StartPoint="{Binding Start, Converter={x:Static converters:PinToPointConverter.Instance}}" 
-                                  EndPoint="{Binding End, Converter={x:Static converters:PinToPointConverter.Instance}}"
-                                  Offset="{Binding Offset}"/>
+
+                                        StartPoint="{Binding Start, Converter={x:Static converters:PinToPointConverter.Instance}}" 
+                                        EndPoint="{Binding End, Converter={x:Static converters:PinToPointConverter.Instance}}"
+                                        Offset="{Binding Offset}"/>
             </DataTemplate>
-          </ItemsControl.ItemTemplate>
+          </ItemsControl.DataTemplates>
         </ItemsControl>
       </ControlTemplate>
     </Setter>
@@ -38,3 +52,4 @@
   </ControlTheme>
 
 </ResourceDictionary>
+

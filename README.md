@@ -6,6 +6,15 @@ Simple idea to edit PCBs with curves
 
 ![image](/images/CurvePCB.gif)
 
+## Features
+
+* **Interactive Bezier Curves**: Connect components with smooth cubic Bezier curves.
+* **Control Points & Handles**: Select any curve to reveal draggable control points ($P_1, P_2$) connected to curve endpoints by dashed handle lines.
+* **Real-Time Dynamic Editing**: Drag control handles to reshape curves interactively with full snapping support.
+* **Handle Management**: Right-click context flyout on any curve provides options to reset control handles, change orientation, and adjust offset.
+
+![Interactive Bezier Curves Control Points](/images/BezierControlPoints.png)
+
 ## Requirements
 
 * **.NET SDK**: 10.0.102 or later
@@ -66,7 +75,7 @@ Open up a terminal prompt and execute the commands:
 ```
 
 ```sh
-cd NodePCB && dotnet run --project samples/NodeEditor.Desktop/NodeEditor.Desktop.csproj --no-build
+dotnet run --project samples/NodeEditor.Desktop/NodeEditor.Desktop.csproj --no-build
 ```
 
 ## Web

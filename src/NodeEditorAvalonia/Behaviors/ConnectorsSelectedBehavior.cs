@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -103,7 +103,12 @@ public class ConnectorsSelectedBehavior : Behavior<ItemsControl>
                     {
                         pseudoClasses.Add(":selected");
                     }
+                    if (child is BezierConnector bezier)
+                    {
+                        bezier.ShowControlPoints = true;
+                    }
                 }
+                connector.OnSelected();
             }
             else
             {
@@ -113,7 +118,12 @@ public class ConnectorsSelectedBehavior : Behavior<ItemsControl>
                     {
                         pseudoClasses.Remove(":selected");
                     }
+                    if (child is BezierConnector bezier)
+                    {
+                        bezier.ShowControlPoints = false;
+                    }
                 }
+                connector.OnDeselected();
             }
         }
     }
@@ -122,7 +132,7 @@ public class ConnectorsSelectedBehavior : Behavior<ItemsControl>
     {
         foreach (var control in itemsControl.GetRealizedContainers())
         {
-            if (control is not { DataContext: ICommonConnector } containerControl)
+            if (control is not { DataContext: ICommonConnector connector } containerControl)
             {
                 continue;
             }
@@ -133,7 +143,12 @@ public class ConnectorsSelectedBehavior : Behavior<ItemsControl>
                 {
                     pseudoClasses.Remove(":selected");
                 }
+                if (child is BezierConnector bezier)
+                {
+                    bezier.ShowControlPoints = false;
+                }
             }
+            connector.OnDeselected();
         }
     }
 }

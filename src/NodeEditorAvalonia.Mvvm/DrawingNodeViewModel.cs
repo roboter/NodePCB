@@ -90,7 +90,30 @@ public partial class DrawingNodeViewModel : NodeViewModel, IDrawingNode
 
     public ISet<ICommonConnector>? GetSelectedConnectors() => _selectedConnectors;
 
-    public void SetSelectedConnectors(ISet<ICommonConnector>? connectors) => _selectedConnectors = connectors;
+    public void SetSelectedConnectors(ISet<ICommonConnector>? connectors)
+    {
+        if (_selectedConnectors is { })
+        {
+            foreach (var c in _selectedConnectors)
+            {
+                if (connectors is null || !connectors.Contains(c))
+                {
+                    c.OnDeselected();
+                }
+            }
+        }
+
+        _selectedConnectors = connectors;
+
+        if (_selectedConnectors is { })
+        {
+            foreach (var c in _selectedConnectors)
+            {
+                c.OnSelected();
+            }
+        }
+    }
+
 
     public INodeSerializer? GetSerializer() => _serializer;
 

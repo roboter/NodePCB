@@ -1,4 +1,4 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
+<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:CompileBindings="True">
   <Styles.Resources>
@@ -26,6 +26,7 @@
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/Node.axaml" />
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/Nodes.axaml" />
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/OffsetConnector.axaml" />
+        <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/BezierConnector.axaml" />
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/Connectors.axaml" />
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/DrawingNode.axaml" />
         <ResourceInclude Source="avares://NodeEditorAvalonia/Themes/Controls/DrawingNodeProperties.axaml" />

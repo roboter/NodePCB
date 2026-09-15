@@ -1,7 +1,9 @@
-﻿using Avalonia;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using NodeEditor.Model;
 
 namespace NodeEditor.Controls;
@@ -78,24 +80,67 @@ public class OffsetConnector
 
 
 [PseudoClasses(":selected")]
-public class BezierConnector : Shape
+public class BezierConnector : Control
 {
     public static readonly StyledProperty<Point> StartPointProperty =
-        AvaloniaProperty.Register<OffsetConnector, Point>(nameof(StartPoint));
+        AvaloniaProperty.Register<BezierConnector, Point>(nameof(StartPoint));
 
     public static readonly StyledProperty<Point> EndPointProperty =
-        AvaloniaProperty.Register<OffsetConnector, Point>(nameof(EndPoint));
+        AvaloniaProperty.Register<BezierConnector, Point>(nameof(EndPoint));
 
     public static readonly StyledProperty<Point> StartControlPointProperty =
-        AvaloniaProperty.Register<OffsetConnector, Point>(nameof(StartPoint));
+        AvaloniaProperty.Register<BezierConnector, Point>(nameof(StartControlPoint));
 
     public static readonly StyledProperty<Point> EndControlPointProperty =
-        AvaloniaProperty.Register<OffsetConnector, Point>(nameof(EndPoint));
+        AvaloniaProperty.Register<BezierConnector, Point>(nameof(EndControlPoint));
+
+    public static readonly StyledProperty<IBrush?> StrokeProperty =
+        AvaloniaProperty.Register<BezierConnector, IBrush?>(nameof(Stroke), new ImmutableSolidColorBrush(Colors.Red));
+
+    public static readonly StyledProperty<double> StrokeThicknessProperty =
+        AvaloniaProperty.Register<BezierConnector, double>(nameof(StrokeThickness), 2.0);
+
+    public static readonly StyledProperty<IBrush?> HandleStrokeProperty =
+        AvaloniaProperty.Register<BezierConnector, IBrush?>(nameof(HandleStroke));
+
+    public static readonly StyledProperty<IBrush?> HandleFillProperty =
+        AvaloniaProperty.Register<BezierConnector, IBrush?>(nameof(HandleFill));
+
+    public static readonly StyledProperty<double> HandleRadiusProperty =
+        AvaloniaProperty.Register<BezierConnector, double>(nameof(HandleRadius), 6.0);
+
+    public static readonly StyledProperty<bool> ShowControlPointsProperty =
+        AvaloniaProperty.Register<BezierConnector, bool>(nameof(ShowControlPoints), false);
 
     static BezierConnector()
     {
-        StrokeThicknessProperty.OverrideDefaultValue<OffsetConnector>(1);
-        AffectsGeometry<OffsetConnector>(StartPointProperty, EndPointProperty, StartControlPointProperty, EndControlPointProperty);
+        AffectsRender<BezierConnector>(
+            StartPointProperty,
+            EndPointProperty,
+            StartControlPointProperty,
+            EndControlPointProperty,
+            StrokeProperty,
+            StrokeThicknessProperty,
+            ShowControlPointsProperty,
+            HandleStrokeProperty,
+            HandleFillProperty,
+            HandleRadiusProperty);
+    }
+
+    public BezierConnector()
+    {
+        ClipToBounds = false;
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == ShowControlPointsProperty)
+        {
+            PseudoClasses.Set(":selected", change.GetNewValue<bool>());
+            InvalidateVisual();
+        }
     }
 
     public Point StartPoint
@@ -106,8 +151,8 @@ public class BezierConnector : Shape
 
     public Point EndPoint
     {
-        get => GetValue(EndControlPointProperty);
-        set => SetValue(EndControlPointProperty, value);
+        get => GetValue(EndPointProperty);
+        set => SetValue(EndPointProperty, value);
     }
 
     public Point StartControlPoint
@@ -122,18 +167,85 @@ public class BezierConnector : Shape
         set => SetValue(EndControlPointProperty, value);
     }
 
-    protected override Geometry CreateDefiningGeometry()
+    public IBrush? Stroke
     {
+        get => GetValue(StrokeProperty);
+        set => SetValue(StrokeProperty, value);
+    }
+
+    public double StrokeThickness
+    {
+        get => GetValue(StrokeThicknessProperty);
+        set => SetValue(StrokeThicknessProperty, value);
+    }
+
+    public IBrush? HandleStroke
+    {
+        get => GetValue(HandleStrokeProperty);
+        set => SetValue(HandleStrokeProperty, value);
+    }
+
+    public IBrush? HandleFill
+    {
+        get => GetValue(HandleFillProperty);
+        set => SetValue(HandleFillProperty, value);
+    }
+
+    public double HandleRadius
+    {
+        get => GetValue(HandleRadiusProperty);
+        set => SetValue(HandleRadiusProperty, value);
+    }
+
+    public bool ShowControlPoints
+    {
+        get => GetValue(ShowControlPointsProperty);
+        set => SetValue(ShowControlPointsProperty, value);
+    }
+
+    public override void Render(DrawingContext context)
+    {
+        base.Render(context);
+
+        var isSelected = Classes.Contains(":selected") || ShowControlPoints;
+        var strokeBrush = isSelected
+            ? new ImmutableSolidColorBrush(Color.FromRgb(0x17, 0x9D, 0xE3))
+            : (Stroke ?? new ImmutableSolidColorBrush(Colors.Red));
+        var thickness = StrokeThickness > 0 ? StrokeThickness : 2.0;
+
+        // 1. Draw the Bezier curve
+        var curvePen = new ImmutablePen(strokeBrush.ToImmutable(), thickness, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
         var geometry = new StreamGeometry();
+        using (var ctx = geometry.Open())
+        {
+            ctx.BeginFigure(StartPoint, false);
+            ctx.CubicBezierTo(StartControlPoint, EndControlPoint, EndPoint);
+            ctx.EndFigure(false);
+        }
+        context.DrawGeometry(null, curvePen, geometry);
 
-        using var context = geometry.Open();
+        // 2. Draw handles and control points if selected
+        if (isSelected)
+        {
+            var handleLineBrush = new ImmutableSolidColorBrush(Color.FromArgb(200, 23, 157, 227));
+            var dashStyle = new ImmutableDashStyle(new double[] { 4, 3 }, 0);
+            var handleLinePen = new ImmutablePen(handleLineBrush, 1.5, dashStyle);
 
-        context.BeginFigure(StartPoint, false);
+            // Line from curve point (StartPoint) to control point (StartControlPoint)
+            context.DrawLine(handleLinePen, StartPoint, StartControlPoint);
 
-        context.CubicBezierTo(StartControlPoint, EndControlPoint, EndPoint);
+            // Line from curve point (EndPoint) to control point (EndControlPoint)
+            context.DrawLine(handleLinePen, EndPoint, EndControlPoint);
 
-        context.EndFigure(false);
+            // Control point handles (circles)
+            var radius = HandleRadius > 0 ? HandleRadius : 6.0;
+            var handleFill = HandleFill ?? new ImmutableSolidColorBrush(Colors.White);
+            var handleStroke = HandleStroke ?? new ImmutableSolidColorBrush(Color.FromArgb(255, 23, 157, 227));
+            var handlePen = new ImmutablePen(handleStroke.ToImmutable(), 2.0);
 
-        return geometry;
+            context.DrawEllipse(handleFill, handlePen, StartControlPoint, radius, radius);
+            context.DrawEllipse(handleFill, handlePen, EndControlPoint, radius, radius);
+        }
     }
 }
+

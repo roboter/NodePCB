@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NodeEditor.Model;
 using NodeEditor.Mvvm;
@@ -38,7 +39,7 @@ internal static class Demo
 
         if (rectangle0.Pins?[1] is { } && rectangle1.Pins?[0] is { })
         {
-            var connector0 = NodeFactory.CreateConnector(rectangle0.Pins[1], rectangle1.Pins[0], 20);
+            var connector0 = NodeFactory.CreateBezierConnector(rectangle0.Pins[1], rectangle1.Pins[0]);
             connector0.Parent = drawing;
             drawing.Connectors.Add(connector0);
         }
@@ -67,10 +68,22 @@ internal static class Demo
         // Connect some components
         if (resistor1.Pins?[1] is { } && capacitor1.Pins?[0] is { })
         {
-            var connector1 = NodeFactory.CreateConnector(resistor1.Pins[1], capacitor1.Pins[0], 20);
+            var connector1 = (BezierConnectorViewModel)NodeFactory.CreateBezierConnector(resistor1.Pins[1], capacitor1.Pins[0]);
             connector1.Parent = drawing;
             drawing.Connectors.Add(connector1);
+
+            if (connector1.StartControl is { } sc && connector1.EndControl is { } ec)
+            {
+                sc.Y -= 45;
+                ec.Y += 45;
+                sc.OnMoved();
+                ec.OnMoved();
+            }
+
+            connector1.OnSelected();
+            drawing.SetSelectedConnectors(new HashSet<ICommonConnector> { connector1 });
         }
+
 
         if (capacitor1.Pins?[1] is { } && led1.Pins?[0] is { })
         {
@@ -124,13 +137,10 @@ internal static class Demo
         //    drawing.Connectors.Add(connector1);
         //}
 
-        var start = 25;
-        var pinsOnSide = 16;
-        var nextPin = 15;
         var pinWidth = 0.35 * 10;
         var pinHeight = 1.35 * 10;
 
-        var side = 9.85 * 10;// pinsOnSide * nextPin + pinWidth + start * 2;
+        var side = 9.85 * 10;
         var rectangleStm = NodeFactory.CreateChip(12, 12, side, side, "LQFP64", pinWidth, pinHeight);
         rectangleStm.Parent = drawing;
         drawing.Nodes.Add(rectangleStm);

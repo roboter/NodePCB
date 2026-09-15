@@ -71,8 +71,10 @@ public interface ICommonConnector
     IPin? End { get; set; }
 
     double Offset { get; set; }
+    bool IsSelected { get; set; }
 
     bool CanSelect();
+
     bool CanRemove();
     event EventHandler<ConnectorCreatedEventArgs>? Created;
     event EventHandler<ConnectorRemovedEventArgs>? Removed;
@@ -93,4 +95,6 @@ public interface IBezierConnector : ICommonConnector
 {
     IPin? StartControl { get; set; }
     IPin? EndControl { get; set; }
+    void ResetControlPoints();
 }
+

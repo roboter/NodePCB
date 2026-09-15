@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -7,7 +7,7 @@ using NodeEditor.Model;
 
 namespace NodeEditor;
 
-internal static class HitTestHelper
+public static class HitTestHelper
 {
     public static double Length(Point pt0, Point pt1)
     {
@@ -67,18 +67,44 @@ internal static class HitTestHelper
         var p2X = p3X;
         var p2Y = p3Y;
 
-        connector.GetControlPoints(
-            connector.Orientation, 
-            connector.Offset, 
-            start.Alignment,
-            end.Alignment,
-            ref p1X, ref p1Y, 
-            ref p2X, ref p2Y);
+        if (connector is IBezierConnector bezier && bezier.StartControl is { } && bezier.EndControl is { })
+        {
+            p1X = bezier.StartControl.X;
+            p1Y = bezier.StartControl.Y;
+            if (bezier.StartControl.Parent is { })
+            {
+                p1X += bezier.StartControl.Parent.X;
+                p1Y += bezier.StartControl.Parent.Y;
+            }
+
+            p2X = bezier.EndControl.X;
+            p2Y = bezier.EndControl.Y;
+            if (bezier.EndControl.Parent is { })
+            {
+                p2X += bezier.EndControl.Parent.X;
+                p2Y += bezier.EndControl.Parent.Y;
+            }
+        }
+        else
+        {
+            connector.GetControlPoints(
+                connector.Orientation, 
+                connector.Offset, 
+                start.Alignment,
+                end.Alignment,
+                ref p1X, ref p1Y, 
+                ref p2X, ref p2Y);
+        }
 
         var pt0 = new Point(p0X, p0Y);
         var pt1 = new Point(p1X, p1Y);
         var pt2 = new Point(p2X, p2Y);
         var pt3 = new Point(p3X, p3Y);
+
+        if (rect.Contains(pt1) || rect.Contains(pt2))
+        {
+            return true;
+        }
 
         var points = FlattenCubic(pt0, pt1, pt2, pt3);
 
@@ -91,6 +117,71 @@ internal static class HitTestHelper
         }
 
         return false;
+    }
+
+    public static (IBezierConnector? connector, IPin? pin) HitTestControlPoint(IDrawingNode drawingNode, Point position, double radius = 12.0)
+    {
+        if (drawingNode.Connectors is null)
+        {
+            return (null, null);
+        }
+
+        var selectedConnectors = drawingNode.GetSelectedConnectors();
+        if (selectedConnectors is { Count: > 0 })
+        {
+            foreach (var connector in selectedConnectors)
+            {
+                if (connector is IBezierConnector bezier)
+                {
+                    var hit = CheckBezierHandles(bezier, position, radius);
+                    if (hit is not null)
+                    {
+                        return (bezier, hit);
+                    }
+                }
+            }
+
+            return (null, null);
+        }
+
+        foreach (var connector in drawingNode.Connectors)
+        {
+            if (connector is IBezierConnector bezier)
+            {
+                var hit = CheckBezierHandles(bezier, position, radius);
+                if (hit is not null)
+                {
+                    return (bezier, hit);
+                }
+            }
+        }
+
+        return (null, null);
+    }
+
+    private static IPin? CheckBezierHandles(IBezierConnector bezier, Point position, double radius)
+    {
+        if (bezier.StartControl is { } sc)
+        {
+            var p1X = sc.X + (sc.Parent?.X ?? 0);
+            var p1Y = sc.Y + (sc.Parent?.Y ?? 0);
+            if (Length(position, new Point(p1X, p1Y)) <= radius)
+            {
+                return sc;
+            }
+        }
+
+        if (bezier.EndControl is { } ec)
+        {
+            var p2X = ec.X + (ec.Parent?.X ?? 0);
+            var p2Y = ec.Y + (ec.Parent?.Y ?? 0);
+            if (Length(position, new Point(p2X, p2Y)) <= radius)
+            {
+                return ec;
+            }
+        }
+
+        return null;
     }
 
     public static Rect GetConnectorBounds(ICommonConnector connector)
@@ -124,13 +215,34 @@ internal static class HitTestHelper
         var p2X = p3X;
         var p2Y = p3Y;
 
-        connector.GetControlPoints(
-            connector.Orientation, 
-            connector.Offset, 
-            start.Alignment,
-            end.Alignment,
-            ref p1X, ref p1Y, 
-            ref p2X, ref p2Y);
+        if (connector is IBezierConnector bezier && bezier.StartControl is { } && bezier.EndControl is { })
+        {
+            p1X = bezier.StartControl.X;
+            p1Y = bezier.StartControl.Y;
+            if (bezier.StartControl.Parent is { })
+            {
+                p1X += bezier.StartControl.Parent.X;
+                p1Y += bezier.StartControl.Parent.Y;
+            }
+
+            p2X = bezier.EndControl.X;
+            p2Y = bezier.EndControl.Y;
+            if (bezier.EndControl.Parent is { })
+            {
+                p2X += bezier.EndControl.Parent.X;
+                p2Y += bezier.EndControl.Parent.Y;
+            }
+        }
+        else
+        {
+            connector.GetControlPoints(
+                connector.Orientation, 
+                connector.Offset, 
+                start.Alignment,
+                end.Alignment,
+                ref p1X, ref p1Y, 
+                ref p2X, ref p2Y);
+        }
 
         var pt0 = new Point(p0X, p0Y);
         var pt1 = new Point(p1X, p1Y);
@@ -139,10 +251,11 @@ internal static class HitTestHelper
 
         var points = FlattenCubic(pt0, pt1, pt2, pt3);
 
-        var topLeftX = 0.0;
-        var topLeftY = 0.0;
-        var bottomRightX = 0.0;
-        var bottomRightY = 0.0;
+        var topLeftX = Math.Min(p1X, p2X);
+        var topLeftY = Math.Min(p1Y, p2Y);
+        var bottomRightX = Math.Max(p1X, p2X);
+        var bottomRightY = Math.Max(p1Y, p2Y);
+
 
         for (var i = 0; i < points.Length; i++)
         {
@@ -270,15 +383,7 @@ internal static class HitTestHelper
             }
         }
 
-        if (selectedConnectors is { Count: > 0 } && drawingNode.Connectors is { Count: > 0 })
-        {
-            foreach (var connector in selectedConnectors)
-            {
-                var bounds = GetConnectorBounds(connector);
-                selectedRect = selectedRect == default ? bounds : selectedRect.Union(bounds);
-            }
-        }
-
         return selectedRect;
+
     }
 }

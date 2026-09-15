@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NodeEditorAvalonia\NodeEditorAvalonia.csproj" />
+    <ProjectReference Include="..\..\src\NodeEditorAvalonia.Mvvm\NodeEditorAvalonia.Mvvm.csproj" />
   </ItemGroup>
+
 
 </Project>
