@@ -32,9 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Nodes\RoundedRectangleView.axaml.cs">
-      <DependentUpon>RoundedRectangleView.axaml</DependentUpon>
-    </Compile>
+    <None Update="Data\Components\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <AvaloniaResource Include="Data\Components\*.json" />
   </ItemGroup>
 
 </Project>

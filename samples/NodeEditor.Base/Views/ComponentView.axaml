@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NodeEditorDemo.ViewModels"
+             mc:Ignorable="d"
+             x:Class="NodeEditorDemo.Views.ComponentView"
+             x:CompileBindings="True" x:DataType="vm:ComponentViewModel"
+             ClipToBounds="False">
+
+  <Panel ClipToBounds="False">
+    <!-- Right-click Component Settings Flyout -->
+    <Panel.ContextFlyout>
+      <Flyout>
+        <StackPanel Width="260" Spacing="8">
+          <TextBlock Text="Component Properties" FontWeight="Bold" FontSize="13" />
+
+          <StackPanel Spacing="3">
+            <Label Content="Designator / Name:" FontSize="11" />
+            <TextBox Text="{Binding Name}" Watermark="e.g. R1, D1, U1" />
+          </StackPanel>
+
+          <StackPanel Spacing="3">
+            <Label Content="Value:" FontSize="11" />
+            <TextBox Text="{Binding Value}" Watermark="e.g. 10kΩ, 100nF" />
+          </StackPanel>
+
+          <StackPanel Spacing="3">
+            <Label Content="Package:" FontSize="11" />
+            <TextBox Text="{Binding Package}" IsReadOnly="True" Opacity="0.8" />
+          </StackPanel>
+        </StackPanel>
+      </Flyout>
+    </Panel.ContextFlyout>
+
+    <Canvas Name="PART_Canvas" ClipToBounds="False" />
+  </Panel>
+</UserControl>

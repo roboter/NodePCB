@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -33,6 +33,23 @@
       <PathIcon Width="16" Height="16"
                 Margin="6,0,6,0"
                 Data="{DynamicResource SettingsIcon}" />
+    </Button>
+
+    <!-- Export Gerber Button -->
+    <Button Margin="4,2,4,2" 
+            Padding="8,5,8,5" 
+            Background="#179DE3"
+            Foreground="White"
+            CornerRadius="3"
+            Command="{Binding ExportGerberCommand}"
+            ToolTip.Tip="Export KiCad-Compatible Gerber Package (.zip)"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Right">
+      <StackPanel Orientation="Horizontal" Spacing="5">
+        <PathIcon Width="13" Height="13" Foreground="White"
+                  Data="M4 2 C2.89 2 2 2.89 2 4 L2 20 C2 21.11 2.89 22 4 22 L20 22 C21.11 22 22 21.11 22 20 L22 4 C22 2.89 21.11 2 20 2 L4 2 Z M4 4 L20 4 L20 20 L4 20 L4 4 Z" />
+        <TextBlock Text="Export Gerber" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+      </StackPanel>
     </Button>
 
     <!-- Toggle -->
@@ -83,6 +100,14 @@
         <MenuItem Header="Export..." 
                   Command="{Binding ExportCommand}"
                   IsVisible="{x:Static app:App.EnableInputOutput}" />
+        <MenuItem Header="Export _Gerber (KiCad)..." 
+                  Command="{Binding ExportGerberCommand}"
+                  InputGesture="{OnPlatform macOS=CMD+G, iOS=CMD+G, Default=Ctrl+G}"
+                  IsVisible="{x:Static app:App.EnableInputOutput}">
+          <MenuItem.Icon>
+            <PathIcon Width="16" Height="16" Data="M4 2 C2.89 2 2 2.89 2 4 L2 20 C2 21.11 2.89 22 4 22 L20 22 C21.11 22 22 21.11 22 20 L22 4 C22 2.89 21.11 2 20 2 L4 2 Z M4 4 L20 4 L20 20 L4 20 L4 4 Z" />
+          </MenuItem.Icon>
+        </MenuItem>
         <Separator IsVisible="{x:Static app:App.EnableInputOutput}"/>
         <MenuItem Header="E_xit" 
                   Command="{Binding ExitCommand}" 

@@ -1,0 +1,123 @@
+{
+  "name": "Resistor",
+  "type": "ThroughHole",
+  "designatorPrefix": "R",
+  "value": "10kΩ",
+  "package": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+  "description": "Through-hole 1/4W axial resistor, 10.16mm lead spacing (4 breadboard holes)",
+  "width": 101.6,
+  "height": 50.8,
+  "outline": [
+    {
+      "type": "Line",
+      "x1": 0.0,
+      "y1": 25.4,
+      "x2": 20.8,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Line",
+      "x1": 80.8,
+      "y1": 25.4,
+      "x2": 101.6,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 20.8,
+      "y": 17.4,
+      "width": 60.0,
+      "height": 16.0,
+      "fill": "#E8D8B8",
+      "stroke": "#8B4513",
+      "strokeWidth": 1.5,
+      "radius": 3.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 28.0,
+      "y": 17.4,
+      "width": 4.0,
+      "height": 16.0,
+      "fill": "#654321"
+    },
+    {
+      "type": "Rectangle",
+      "x": 38.0,
+      "y": 17.4,
+      "width": 4.0,
+      "height": 16.0,
+      "fill": "#111111"
+    },
+    {
+      "type": "Rectangle",
+      "x": 48.0,
+      "y": 17.4,
+      "width": 4.0,
+      "height": 16.0,
+      "fill": "#FF8C00"
+    },
+    {
+      "type": "Rectangle",
+      "x": 68.0,
+      "y": 17.4,
+      "width": 4.0,
+      "height": 16.0,
+      "fill": "#DAA520"
+    }
+  ],
+  "pins": [
+    {
+      "number": 1,
+      "name": "1",
+      "net": "Net-(R1-Pad1)",
+      "x": 0.0,
+      "y": 25.4,
+      "alignment": "Left",
+      "padShape": "Rectangle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    },
+    {
+      "number": 2,
+      "name": "2",
+      "net": "Net-(R1-Pad2)",
+      "x": 101.6,
+      "y": 25.4,
+      "alignment": "Right",
+      "padShape": "Circle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    }
+  ],
+  "mountingHoles": [],
+  "labels": {
+    "designator": {
+      "x": 50.8,
+      "y": 3.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 8.0,
+      "color": "#8B4513",
+      "fontWeight": "Bold"
+    },
+    "value": {
+      "x": 50.8,
+      "y": 37.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 7.5,
+      "color": "#654321",
+      "fontWeight": "Bold"
+    }
+  },
+  "kicad": {
+    "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+    "pinPitch": 2.54,
+    "padSpan": 10.16
+  }
+}

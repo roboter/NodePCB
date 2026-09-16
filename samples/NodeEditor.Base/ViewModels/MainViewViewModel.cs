@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -267,6 +267,48 @@ public partial class MainViewViewModel : ViewModelBase
             {
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
+            }
+        }
+    }
+
+    [RelayCommand]
+    public async Task ExportGerber()
+    {
+        if (Editor?.Drawing is null)
+        {
+            return;
+        }
+
+        var storageProvider = StorageService.GetStorageProvider();
+        if (storageProvider is null)
+        {
+            return;
+        }
+
+        var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Export KiCad Gerber Package",
+            FileTypeChoices = new List<FilePickerFileType>
+            {
+                StorageService.GerberZip,
+                StorageService.All
+            },
+            SuggestedFileName = "arduinouno-gerber",
+            DefaultExtension = "zip",
+            ShowOverwritePrompt = true
+        });
+
+        if (file is not null)
+        {
+            try
+            {
+                await using var stream = await file.OpenWriteAsync();
+                await GerberExportService.ExportGerberPackageZipAsync(Editor.Drawing, stream, "arduinouno");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
             }
         }
     }

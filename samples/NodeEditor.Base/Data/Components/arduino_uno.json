@@ -1,0 +1,171 @@
+{
+  "name": "Arduino Uno",
+  "type": "DevelopmentBoard",
+  "designatorPrefix": "A",
+  "value": "ATmega328P",
+  "package": "Module:Arduino_Uno",
+  "description": "Arduino Uno R3 development board with standard header pinout, mounting holes, and board outline",
+  "width": 280.0,
+  "height": 215.0,
+  "outline": [
+    {
+      "type": "Path",
+      "data": "M 4,0 L 254,0 L 264,10 L 264,51 L 275,61 L 275,198 L 264,208 L 261,215 L 4,215 A 4,4 0 0,1 0,211 L 0,4 A 4,4 0 0,1 4,0 Z",
+      "fill": "#008184",
+      "stroke": "#005C5E",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 38.0,
+      "y": 24.0,
+      "width": 222.0,
+      "height": 166.0,
+      "fill": "#0B6E77",
+      "radius": 3.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 0.0,
+      "y": 38.0,
+      "width": 36.0,
+      "height": 42.0,
+      "fill": "#C0C5CA",
+      "stroke": "#7F858A",
+      "strokeWidth": 1.5,
+      "radius": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 0.0,
+      "y": 146.0,
+      "width": 44.0,
+      "height": 42.0,
+      "fill": "#1B1E22",
+      "stroke": "#0C0E10",
+      "strokeWidth": 1.5,
+      "radius": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 124.0,
+      "y": 90.0,
+      "width": 98.0,
+      "height": 40.0,
+      "fill": "#1A1C20",
+      "stroke": "#0D0E10",
+      "strokeWidth": 1.5,
+      "radius": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 72.0,
+      "y": 3.0,
+      "width": 103.0,
+      "height": 15.0,
+      "fill": "#1A1C20",
+      "stroke": "#FFFFFF",
+      "strokeWidth": 1.0,
+      "radius": 1.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 179.0,
+      "y": 3.0,
+      "width": 83.0,
+      "height": 15.0,
+      "fill": "#1A1C20",
+      "stroke": "#FFFFFF",
+      "strokeWidth": 1.0,
+      "radius": 1.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 109.0,
+      "y": 197.0,
+      "width": 83.0,
+      "height": 15.0,
+      "fill": "#1A1C20",
+      "stroke": "#FFFFFF",
+      "strokeWidth": 1.0,
+      "radius": 1.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 198.0,
+      "y": 197.0,
+      "width": 63.0,
+      "height": 15.0,
+      "fill": "#1A1C20",
+      "stroke": "#FFFFFF",
+      "strokeWidth": 1.0,
+      "radius": 1.0
+    }
+  ],
+  "pins": [
+    { "number": 1, "name": "SCL", "net": "/SCL{slash}A5", "x": 77.0, "y": 10.0, "alignment": "Top", "padShape": "Rectangle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 2, "name": "SDA", "net": "/SDA{slash}A4", "x": 87.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 3, "name": "AREF", "net": "/AREF", "x": 97.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 4, "name": "GND", "net": "GND", "x": 107.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 5, "name": "13", "net": "/13", "x": 118.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 6, "name": "12", "net": "/12", "x": 128.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 7, "name": "~11", "net": "/\\u002A11", "x": 138.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 8, "name": "~10", "net": "/\\u002A10", "x": 148.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 9, "name": "~9", "net": "/\\u002A9", "x": 158.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 10, "name": "8", "net": "/8", "x": 169.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+
+    { "number": 11, "name": "7", "net": "/7", "x": 185.0, "y": 10.0, "alignment": "Top", "padShape": "Rectangle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 12, "name": "~6", "net": "/\\u002A6", "x": 195.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 13, "name": "~5", "net": "/\\u002A5", "x": 205.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 14, "name": "4", "net": "/4", "x": 215.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 15, "name": "~3", "net": "/\\u002A3", "x": 226.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 16, "name": "2", "net": "/2", "x": 236.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 17, "name": "TX1", "net": "/TX{slash}1", "x": 246.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 18, "name": "RX0", "net": "/RX{slash}0", "x": 256.0, "y": 10.0, "alignment": "Top", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+
+    { "number": 19, "name": "NC", "net": "unconnected-(J1-Pin_1-Pad1)", "x": 114.0, "y": 205.0, "alignment": "Bottom", "padShape": "Rectangle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 20, "name": "IOREF", "net": "/IOREF", "x": 124.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 21, "name": "RESET", "net": "/~{RESET}", "x": 134.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 22, "name": "3.3V", "net": "+3V3", "x": 145.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 23, "name": "5V", "net": "+5V", "x": 155.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 24, "name": "GND1", "net": "GND", "x": 165.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 25, "name": "GND2", "net": "GND", "x": 175.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 26, "name": "VIN", "net": "VCC", "x": 186.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+
+    { "number": 27, "name": "A0", "net": "/A0", "x": 204.0, "y": 205.0, "alignment": "Bottom", "padShape": "Rectangle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 28, "name": "A1", "net": "/A1", "x": 214.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 29, "name": "A2", "net": "/A2", "x": 224.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 30, "name": "A3", "net": "/A3", "x": 235.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 31, "name": "A4", "net": "/SDA{slash}A4", "x": 245.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 },
+    { "number": 32, "name": "A5", "net": "/SCL{slash}A5", "x": 255.0, "y": 205.0, "alignment": "Bottom", "padShape": "Circle", "padWidth": 1.7, "padHeight": 1.7, "drill": 0.9 }
+  ],
+  "mountingHoles": [
+    { "x": 57.0, "y": 12.0, "diameter": 3.2, "collarDiameter": 6.5, "plated": false },
+    { "x": 61.0, "y": 203.0, "diameter": 3.2, "collarDiameter": 6.5, "plated": false },
+    { "x": 264.0, "y": 142.0, "diameter": 3.2, "collarDiameter": 6.5, "plated": false },
+    { "x": 264.0, "y": 30.0, "diameter": 3.2, "collarDiameter": 6.5, "plated": false }
+  ],
+  "labels": {
+    "designator": {
+      "x": 140.0,
+      "y": 48.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 14.0,
+      "color": "#FFFFFF",
+      "fontWeight": "Black"
+    },
+    "value": {
+      "x": 140.0,
+      "y": 68.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 8.0,
+      "color": "#E0E6ED",
+      "fontWeight": "Bold"
+    }
+  },
+  "kicad": {
+    "footprint": "Module:Arduino_Uno",
+    "pinPitch": 2.54,
+    "padSpan": 50.8
+  }
+}

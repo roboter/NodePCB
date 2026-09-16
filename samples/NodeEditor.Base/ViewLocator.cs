@@ -9,6 +9,11 @@ public class ViewLocator : IDataTemplate
 {
     public Control Build(object? data)
     {
+        if (data is ComponentViewModel)
+        {
+            return new Views.ComponentView();
+        }
+
         var name = data?.GetType().FullName?.Replace("ViewModel", "View");
         var type = name is null ? null : Type.GetType(name);
 

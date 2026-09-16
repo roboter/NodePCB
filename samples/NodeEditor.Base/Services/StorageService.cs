@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
@@ -54,6 +54,13 @@ internal static class StorageService
         Patterns = new[] { "*.xps" },
         AppleUniformTypeIdentifiers = new[] { "com.microsoft.xps" },
         MimeTypes = new[] { "application/oxps", "application/vnd.ms-xpsdocument" }
+    };
+
+    public static FilePickerFileType GerberZip { get; } = new("Gerber Package (*.zip)")
+    {
+        Patterns = new[] { "*.zip" },
+        AppleUniformTypeIdentifiers = new[] { "public.zip-archive" },
+        MimeTypes = new[] { "application/zip" }
     };
 
     public static IStorageProvider? GetStorageProvider()

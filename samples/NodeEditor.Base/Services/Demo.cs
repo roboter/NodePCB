@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NodeEditor.Model;
 using NodeEditor.Mvvm;
 
@@ -7,10 +8,10 @@ namespace NodeEditorDemo.Services;
 
 internal static class Demo
 {
-    private const double Inch = 2.54;
+    private const double GridUnit = NodeFactory.BreadboardPitch; // 25.4mm / 2.54mm breadboard pitch
+
     public static IDrawingNode CreateDemoDrawing()
     {
-
         var drawing = new DrawingNodeViewModel
         {
             X = 0,
@@ -21,139 +22,80 @@ internal static class Demo
             Connectors = new ObservableCollection<ICommonConnector>(),
             EnableMultiplePinConnections = false,
             EnableSnap = true,
-            SnapX = Inch * 10,
-            SnapY = Inch * 10,
+            SnapX = GridUnit,
+            SnapY = GridUnit,
             EnableGrid = true,
-            GridCellWidth = Inch * 10,
-            GridCellHeight = Inch * 10,
+            GridCellWidth = GridUnit,
+            GridCellHeight = GridUnit,
         };
 
-        // Create some basic components first
-        var rectangle0 = NodeFactory.CreateRectangle(30, 30, 60, 60, "rect0");
-        rectangle0.Parent = drawing;
-        drawing.Nodes.Add(rectangle0);
-
-        var rectangle1 = NodeFactory.CreateRectangle(240, 30, 60, 60, "rect1");
-        rectangle1.Parent = drawing;
-        drawing.Nodes.Add(rectangle1);
-
-        if (rectangle0.Pins?[1] is { } && rectangle1.Pins?[0] is { })
-        {
-            var connector0 = NodeFactory.CreateBezierConnector(rectangle0.Pins[1], rectangle1.Pins[0]);
-            connector0.Parent = drawing;
-            drawing.Connectors.Add(connector0);
-        }
-
-        // Add PCB electronic components
-        var resistor1 = NodeFactory.CreateResistor(30, 120, "10kΩ", "5%");
+        // 1. Resistor (10kΩ) at (GridUnit * 1, GridUnit * 2)
+        var resistor1 = NodeFactory.CreateResistor(GridUnit * 1, GridUnit * 2, "10kΩ");
         resistor1.Parent = drawing;
         drawing.Nodes.Add(resistor1);
 
-        var capacitor1 = NodeFactory.CreateCapacitor(200, 120, "100µF", "25V");
-        capacitor1.Parent = drawing;
-        drawing.Nodes.Add(capacitor1);
+        // 2. Diode (1N4007) at (GridUnit * 1, GridUnit * 5)
+        var diode1 = NodeFactory.CreateDiode(GridUnit * 1, GridUnit * 5, "1N4007");
+        diode1.Parent = drawing;
+        drawing.Nodes.Add(diode1);
 
-        var led1 = NodeFactory.CreateLED(350, 100, "Red");
+        // 3. Inductor (100µH) at (GridUnit * 1, GridUnit * 8)
+        var inductor1 = NodeFactory.CreateInductor(GridUnit * 1, GridUnit * 8, "100µH");
+        inductor1.Parent = drawing;
+        drawing.Nodes.Add(inductor1);
+
+        // 4. Ceramic Capacitor (100nF) at (GridUnit * 6, GridUnit * 2)
+        var ceramicCap1 = NodeFactory.CreateCeramicCapacitor(GridUnit * 6, GridUnit * 2, "100nF");
+        ceramicCap1.Parent = drawing;
+        drawing.Nodes.Add(ceramicCap1);
+
+        // 5. Electrolytic Capacitor (100µF) at (GridUnit * 9, GridUnit * 2)
+        var cap1 = NodeFactory.CreateCapacitor(GridUnit * 9, GridUnit * 2, "100µF");
+        cap1.Parent = drawing;
+        drawing.Nodes.Add(cap1);
+
+        // 6. LED (Red) at (GridUnit * 9, GridUnit * 5)
+        var led1 = NodeFactory.CreateLED(GridUnit * 9, GridUnit * 5, "Red");
         led1.Parent = drawing;
         drawing.Nodes.Add(led1);
 
-        var transistor1 = NodeFactory.CreateTransistor(30, 220, "2N2222");
-        transistor1.Parent = drawing;
-        drawing.Nodes.Add(transistor1);
+        // 7. Arduino Uno development board at (GridUnit * 13, GridUnit * 2)
+        var uno = NodeFactory.CreateArduinoUno(GridUnit * 13, GridUnit * 2);
+        uno.Parent = drawing;
+        drawing.Nodes.Add(uno);
 
-        var arduino1 = NodeFactory.CreateMicrocontroller(200, 220, "Arduino Nano");
-        arduino1.Parent = drawing;
-        drawing.Nodes.Add(arduino1);
-
-        // Connect some components
-        if (resistor1.Pins?[1] is { } && capacitor1.Pins?[0] is { })
+        // Connect components using curved Bezier traces
+        if (resistor1.Pins?[1] is { } && ceramicCap1.Pins?[0] is { })
         {
-            var connector1 = (BezierConnectorViewModel)NodeFactory.CreateBezierConnector(resistor1.Pins[1], capacitor1.Pins[0]);
-            connector1.Parent = drawing;
-            drawing.Connectors.Add(connector1);
-
-            if (connector1.StartControl is { } sc && connector1.EndControl is { } ec)
-            {
-                sc.Y -= 45;
-                ec.Y += 45;
-                sc.OnMoved();
-                ec.OnMoved();
-            }
-
-            connector1.OnSelected();
-            drawing.SetSelectedConnectors(new HashSet<ICommonConnector> { connector1 });
+            var conn1 = (BezierConnectorViewModel)NodeFactory.CreateBezierConnector(resistor1.Pins[1], ceramicCap1.Pins[0]);
+            conn1.Parent = drawing;
+            drawing.Connectors.Add(conn1);
+            conn1.OnSelected();
+            drawing.SetSelectedConnectors(new HashSet<ICommonConnector> { conn1 });
         }
 
-
-        if (capacitor1.Pins?[1] is { } && led1.Pins?[0] is { })
+        if (ceramicCap1.Pins?[1] is { } && cap1.Pins?[0] is { })
         {
-            var connector2 = NodeFactory.CreateConnector(capacitor1.Pins[1], led1.Pins[0], 20);
-            connector2.Parent = drawing;
-            drawing.Connectors.Add(connector2);
+            var conn2 = NodeFactory.CreateConnector(ceramicCap1.Pins[1], cap1.Pins[0], 20);
+            conn2.Parent = drawing;
+            drawing.Connectors.Add(conn2);
         }
 
-        //var rectangle2 = NodeFactory.CreateRectangle(30, 150, 60, 60, "rect2");
-        //rectangle2.Parent = drawing;
-        //drawing.Nodes.Add(rectangle2);
+        if (cap1.Pins?[1] is { } && led1.Pins?[0] is { })
+        {
+            var conn3 = NodeFactory.CreateConnector(cap1.Pins[1], led1.Pins[0], 20);
+            conn3.Parent = drawing;
+            drawing.Connectors.Add(conn3);
+        }
 
-        //var ellipse0 = NodeFactory.CreateEllipse(240, 150, 60, 60, "ellipse0");
-        //ellipse0.Parent = drawing;
-        //drawing.Nodes.Add(ellipse0);
-
-        //var signal0 = NodeFactory.CreateSignal(x: 30, y: 270, label: "in0", state: true);
-        //signal0.Parent = drawing;
-        //drawing.Nodes.Add(signal0);
-
-        //var signal1 = NodeFactory.CreateSignal(x: 30, y: 390, label: "in1", state: false);
-        //signal1.Parent = drawing;
-        //drawing.Nodes.Add(signal1);
-
-        //var signal2 = NodeFactory.CreateSignal(x: 420, y: 375, label: "out0", state: true);
-        //signal2.Parent = drawing;
-        //drawing.Nodes.Add(signal2);
-
-        //var orGate0 = NodeFactory.CreateOrGate(300, 360);
-        //orGate0.Parent = drawing;
-        //drawing.Nodes.Add(orGate0);
-
-        //if (signal0.Pins?[1] is { } && orGate0.Pins?[2] is { })
-        //{
-        //    var connector0 = NodeFactory.CreateConnector(signal0.Pins[1], orGate0.Pins[2]);
-        //    connector0.Parent = drawing;
-        //    drawing.Connectors.Add(connector0);
-        //}
-
-        //if (signal1.Pins?[1] is { } && orGate0.Pins?[0] is { })
-        //{
-        //    var connector0 = NodeFactory.CreateConnector(signal1.Pins[1], orGate0.Pins[0]);
-        //    connector0.Parent = drawing;
-        //    drawing.Connectors.Add(connector0);
-        //}
-
-        //if (orGate0.Pins?[1] is { } && signal2.Pins?[0] is { })
-        //{
-        //    var connector1 = NodeFactory.CreateConnector(orGate0.Pins[1], signal2.Pins[0]);
-        //    connector1.Parent = drawing;
-        //    drawing.Connectors.Add(connector1);
-        //}
-
-        var pinWidth = 0.35 * 10;
-        var pinHeight = 1.35 * 10;
-
-        var side = 9.85 * 10;
-        var rectangleStm = NodeFactory.CreateChip(12, 12, side, side, "LQFP64", pinWidth, pinHeight);
-        rectangleStm.Parent = drawing;
-        drawing.Nodes.Add(rectangleStm);
-
-        // TODO: How to move VIA?
-        var via1 = NodeFactory.CreateVia(120, 12, 60, 60, "v1");
-        via1.Parent = drawing;
-        drawing.Nodes.Add(via1);
-
-        var pin1 = NodeFactory.CreatePin(Inch * 10 - Inch * 5, Inch * 10 - Inch * 5, Inch * 10, Inch * 10, "p1");
-        pin1.Parent = drawing;
-        drawing.Nodes.Add(pin1);
-
+        // Connect Arduino Uno D13 pin to LED anode via curved Bezier trace
+        var d13Pin = uno.Pins?.FirstOrDefault(p => p.Name == "13");
+        if (d13Pin != null && led1.Pins?[0] is { })
+        {
+            var connUno = (BezierConnectorViewModel)NodeFactory.CreateBezierConnector(d13Pin, led1.Pins[0]);
+            connUno.Parent = drawing;
+            drawing.Connectors.Add(connUno);
+        }
 
         return drawing;
     }

@@ -1,0 +1,107 @@
+{
+  "name": "LED",
+  "type": "ThroughHole",
+  "designatorPrefix": "D",
+  "value": "Red",
+  "package": "LED_THT:LED_D5.0mm",
+  "description": "Through-hole 5mm radial LED, 5.08mm lead spacing (2 breadboard holes)",
+  "width": 50.8,
+  "height": 50.8,
+  "outline": [
+    {
+      "type": "Line",
+      "x1": 0.0,
+      "y1": 25.4,
+      "x2": 15.4,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Line",
+      "x1": 35.4,
+      "y1": 25.4,
+      "x2": 50.8,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Ellipse",
+      "x": 13.4,
+      "y": 13.4,
+      "width": 24.0,
+      "height": 24.0,
+      "fill": "#E74C3C",
+      "stroke": "#C0392B",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "Line",
+      "x1": 35.4,
+      "y1": 17.4,
+      "x2": 35.4,
+      "y2": 33.4,
+      "stroke": "#962D22",
+      "strokeWidth": 2.5
+    },
+    {
+      "type": "Ellipse",
+      "x": 18.0,
+      "y": 18.0,
+      "width": 8.0,
+      "height": 6.0,
+      "fill": "#FFA090"
+    }
+  ],
+  "pins": [
+    {
+      "number": 1,
+      "name": "A",
+      "net": "Net-(D1-Pad1)",
+      "x": 0.0,
+      "y": 25.4,
+      "alignment": "Left",
+      "padShape": "Rectangle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    },
+    {
+      "number": 2,
+      "name": "K",
+      "net": "Net-(D1-Pad2)",
+      "x": 50.8,
+      "y": 25.4,
+      "alignment": "Right",
+      "padShape": "Circle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    }
+  ],
+  "mountingHoles": [],
+  "labels": {
+    "designator": {
+      "x": 25.4,
+      "y": 2.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 8.0,
+      "color": "#E74C3C",
+      "fontWeight": "Bold"
+    },
+    "value": {
+      "x": 25.4,
+      "y": 40.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 7.5,
+      "color": "#E74C3C",
+      "fontWeight": "Bold"
+    }
+  },
+  "kicad": {
+    "footprint": "LED_THT:LED_D5.0mm",
+    "pinPitch": 2.54,
+    "padSpan": 5.08
+  }
+}

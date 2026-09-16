@@ -1,0 +1,99 @@
+{
+  "name": "Capacitor",
+  "type": "ThroughHole",
+  "designatorPrefix": "C",
+  "value": "100µF",
+  "package": "Capacitor_THT:CP_Radial_D6.3mm_P2.5mm",
+  "description": "Through-hole electrolytic radial capacitor, 5.08mm lead spacing (2 breadboard holes)",
+  "width": 50.8,
+  "height": 50.8,
+  "outline": [
+    {
+      "type": "Line",
+      "x1": 0.0,
+      "y1": 25.4,
+      "x2": 11.4,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Line",
+      "x1": 39.4,
+      "y1": 25.4,
+      "x2": 50.8,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Ellipse",
+      "x": 11.4,
+      "y": 11.4,
+      "width": 28.0,
+      "height": 28.0,
+      "fill": "#1B2A47",
+      "stroke": "#0E1726",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "Rectangle",
+      "x": 33.0,
+      "y": 12.0,
+      "width": 6.0,
+      "height": 26.8,
+      "fill": "#D0D5DD",
+      "radius": 1.0
+    }
+  ],
+  "pins": [
+    {
+      "number": 1,
+      "name": "+",
+      "net": "Net-(C1-Pad1)",
+      "x": 0.0,
+      "y": 25.4,
+      "alignment": "Left",
+      "padShape": "Rectangle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    },
+    {
+      "number": 2,
+      "name": "-",
+      "net": "Net-(C1-Pad2)",
+      "x": 50.8,
+      "y": 25.4,
+      "alignment": "Right",
+      "padShape": "Circle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    }
+  ],
+  "mountingHoles": [],
+  "labels": {
+    "designator": {
+      "x": 25.4,
+      "y": 1.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 8.0,
+      "color": "#1B2A47",
+      "fontWeight": "Bold"
+    },
+    "value": {
+      "x": 25.4,
+      "y": 41.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 7.5,
+      "color": "#1B2A47",
+      "fontWeight": "Bold"
+    }
+  },
+  "kicad": {
+    "footprint": "Capacitor_THT:CP_Radial_D6.3mm_P2.5mm",
+    "pinPitch": 2.54,
+    "padSpan": 5.08
+  }
+}

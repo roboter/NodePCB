@@ -1,0 +1,99 @@
+{
+  "name": "Diode",
+  "type": "ThroughHole",
+  "designatorPrefix": "D",
+  "value": "1N4007",
+  "package": "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal",
+  "description": "Through-hole 1A rectifier diode, 10.16mm lead spacing (4 breadboard holes)",
+  "width": 101.6,
+  "height": 50.8,
+  "outline": [
+    {
+      "type": "Line",
+      "x1": 0.0,
+      "y1": 25.4,
+      "x2": 20.8,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Line",
+      "x1": 80.8,
+      "y1": 25.4,
+      "x2": 101.6,
+      "y2": 25.4,
+      "stroke": "#A0A8B0",
+      "strokeWidth": 2.0
+    },
+    {
+      "type": "Rectangle",
+      "x": 20.8,
+      "y": 17.4,
+      "width": 60.0,
+      "height": 16.0,
+      "fill": "#1C1E22",
+      "stroke": "#0D0E10",
+      "strokeWidth": 1.5,
+      "radius": 2.5
+    },
+    {
+      "type": "Rectangle",
+      "x": 68.0,
+      "y": 17.4,
+      "width": 8.0,
+      "height": 16.0,
+      "fill": "#D0D4DA"
+    }
+  ],
+  "pins": [
+    {
+      "number": 1,
+      "name": "A",
+      "net": "Net-(D1-Pad1)",
+      "x": 0.0,
+      "y": 25.4,
+      "alignment": "Left",
+      "padShape": "Rectangle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    },
+    {
+      "number": 2,
+      "name": "K",
+      "net": "Net-(D1-Pad2)",
+      "x": 101.6,
+      "y": 25.4,
+      "alignment": "Right",
+      "padShape": "Circle",
+      "padWidth": 1.7,
+      "padHeight": 1.7,
+      "drill": 0.9
+    }
+  ],
+  "mountingHoles": [],
+  "labels": {
+    "designator": {
+      "x": 50.8,
+      "y": 3.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 8.0,
+      "color": "#1C1E22",
+      "fontWeight": "Bold"
+    },
+    "value": {
+      "x": 46.0,
+      "y": 37.0,
+      "horizontalAlignment": "Center",
+      "fontSize": 7.5,
+      "color": "#E0E4E8",
+      "fontWeight": "Bold"
+    }
+  },
+  "kicad": {
+    "footprint": "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal",
+    "pinPitch": 2.54,
+    "padSpan": 10.16
+  }
+}
